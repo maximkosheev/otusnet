@@ -29,6 +29,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.2.0.Final</version>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-jdbc</artifactId>
 			<version>5.3.21</version>
@@ -43,6 +48,12 @@
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
 			<optional>true</optional>
+		</dependency>
+
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+			<version>7.7.3</version>
 		</dependency>
 
 		<!-- Tests -->

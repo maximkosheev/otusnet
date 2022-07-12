@@ -1,6 +1,4 @@
-spring:
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    url: url
-    username: username
-    password: password
+db:
+  url: jdbc:mysql://localhost:3306/otusnet
+  username: root
+  password: password

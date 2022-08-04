@@ -2,10 +2,7 @@ package ru.monsterdev.study.otusnet.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.monsterdev.study.otusnet.models.SocialUser;
 import ru.monsterdev.study.otusnet.services.UserService;
 
@@ -22,5 +19,10 @@ public class UserController {
     @PostMapping("/register")
     public boolean registerUser(@Valid @RequestBody SocialUser user) {
         return userService.register(user);
+    }
+
+    @GetMapping("/{id}")
+    public SocialUser showUserInfo(@PathVariable("id") Long id) {
+        return userService.getUser(id);
     }
 }

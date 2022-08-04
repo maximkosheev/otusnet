@@ -10,4 +10,10 @@ public interface UserService extends UserDetailsService {
      * @return признак успешности регистрации
      */
     boolean register(SocialUser user);
+
+    /**
+     * Возвращает информацию о пользователе по его идентификатору
+     * @param id идентификатор пользователя
+     */
+    SocialUser getUser(Long id);
 }

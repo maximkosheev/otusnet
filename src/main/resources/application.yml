@@ -2,3 +2,7 @@ db:
   url: jdbc:mysql://localhost:3306/otusnet
   username: root
   password: password
+security:
+  signKey: sdfsdfs
+  accessTokenExpirationPeriod: 86400
+  secret: "5C0B62EB5FB3087AFCE7E9BAC4E0661119BD6278530F56833F8EE18903436CAE"

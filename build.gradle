@@ -32,9 +32,15 @@ dependencies {
 	implementation 'org.flywaydb:flyway-core'
 	compileOnly 'org.projectlombok:lombok'
 	runtimeOnly 'com.mysql:mysql-connector-j'
+
 	annotationProcessor 'org.projectlombok:lombok'
+
+	implementation group: 'com.github.database-rider', name: 'rider-core', version: '1.35.0'
+	testImplementation group: 'com.github.database-rider', name: 'rider-junit5', version: '1.35.0'
+
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
+	testImplementation 'org.dbunit:dbunit:2.7.3'
 	testImplementation 'com.h2database:h2'
 }
 

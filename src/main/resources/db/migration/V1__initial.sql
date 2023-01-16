@@ -1,4 +1,4 @@
-create table users
+create table OTUSET_USER
 (
     id        bigint auto_increment,
     firstName varchar(20)  not null,

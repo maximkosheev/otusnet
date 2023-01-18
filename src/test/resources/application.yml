@@ -1,0 +1,5 @@
+datasource:
+  driver-class-name: org.h2.Driver
+  username: 'sa'
+  password: ''
+  url: 'jdbc:h2:mem:default;MODE=LEGACY;DB_CLOSE_DELAY=-1'

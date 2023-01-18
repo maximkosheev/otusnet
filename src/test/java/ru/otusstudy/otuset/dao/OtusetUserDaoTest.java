@@ -32,7 +32,7 @@ class OtusetUserDaoTest {
 
     @Test
     @DataSet(value = "dataset.yml", executorId = "flyway")
-    void getAllUsers_shouldReturnAllUsers() {
+    void getAllUsers_shouldReturnAllUsers() throws Exception {
         List<OtusetUser> users = userDao.getAllUsers();
         System.out.println(users.size());
     }

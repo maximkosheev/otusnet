@@ -1,0 +1,15 @@
+otuset_user:
+  - id: 1
+    firstName: 'firstName'
+    lastName: 'lastName'
+    sex: 'M'
+    age: 18
+    city: 'London'
+    interests: 'Reading'
+  - id: 2
+    firstName: 'newFirstName'
+    lastName: 'newLastName'
+    sex: 'F'
+    age: 20
+    city: 'NY'
+    interests: 'Running'

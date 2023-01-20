@@ -1,8 +1,10 @@
 package ru.otusstudy.otuset.dao;
 
 import com.github.database.rider.core.api.dataset.DataSet;
+import com.github.database.rider.core.api.dataset.ExpectedDataSet;
 import com.github.database.rider.junit5.DBUnitExtension;
 import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -34,6 +36,22 @@ class OtusetUserDaoTest {
     @DataSet(value = "dataset.yml", executorId = "flyway")
     void getAllUsers_shouldReturnAllUsers() throws Exception {
         List<OtusetUser> users = userDao.getAllUsers();
-        System.out.println(users.size());
+        Assertions.assertEquals(1, users.size());
     }
+
+    @Test
+    @DataSet(value = "dataset.yml", executorId = "flyway")
+    @ExpectedDataSet(value = "expectedCreateUser.yml", ignoreCols = {"id"})
+    void createUser_shouldCreateNewUser() throws Exception {
+        OtusetUser newUser = OtusetUser.builder()
+                .firstName("newFirstName")
+                .lastName("newLastName")
+                .sex("F")
+                .age(20)
+                .interests("Running")
+                .city("NY")
+                .build();
+        Assertions.assertTrue(userDao.createUser(newUser) > 0);
+    }
+
 }

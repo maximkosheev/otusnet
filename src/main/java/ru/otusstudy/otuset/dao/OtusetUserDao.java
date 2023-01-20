@@ -36,6 +36,7 @@ public class OtusetUserDao {
                     .build();
             result.add(user);
         }
+        stmt.close();
         return result;
     }
 
@@ -47,8 +48,11 @@ public class OtusetUserDao {
         stmt.setInt(4, newUser.getAge());
         stmt.setString(5, newUser.getInterests());
         stmt.setString(6, newUser.getCity());
+        stmt.execute();
         ResultSet rs = stmt.getGeneratedKeys();
-        rs.next();
-        return rs.getLong(1);
+        rs.first();
+        long newId = rs.getLong(1);
+        stmt.close();
+        return newId;
     }
 }

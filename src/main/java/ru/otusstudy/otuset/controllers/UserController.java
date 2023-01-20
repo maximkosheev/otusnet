@@ -2,14 +2,14 @@ package ru.otusstudy.otuset.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import ru.otusstudy.otuset.domain.OtusetUser;
 import ru.otusstudy.otuset.models.dto.requests.CreateUserDto;
+import ru.otusstudy.otuset.models.dto.responses.UserDto;
 import ru.otusstudy.otuset.services.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @Slf4j
 @RestController
@@ -18,6 +18,13 @@ import javax.validation.Valid;
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping
+    public List<UserDto> getUsers() {
+        log.info("Получение списка пользователей");
+        return userService.getAll()
+                .orElseThrow(() -> new RuntimeException("Ошибка получения списка пользователей"));
+    }
 
     @PostMapping("/create")
     public String createUser(@Valid @RequestBody CreateUserDto createUserDto) {

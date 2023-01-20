@@ -6,8 +6,11 @@ import org.mapstruct.Named;
 import org.mapstruct.ReportingPolicy;
 import ru.otusstudy.otuset.domain.OtusetUser;
 import ru.otusstudy.otuset.models.dto.requests.CreateUserDto;
+import ru.otusstudy.otuset.models.dto.responses.UserDto;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class UserMapper {
@@ -15,11 +18,23 @@ public abstract class UserMapper {
     @Mapping(target = "interests", source = "interests", qualifiedByName = "interestsString")
     public abstract OtusetUser toOtusetUser(CreateUserDto createUserDto);
 
+    public abstract UserDto toUserDto(OtusetUser otusetUser);
+
     @Named("interestsString")
     protected String interestsString(List<String> src) {
         if (src == null) {
             return null;
         }
         return String.join(",", src);
+    }
+
+    @Named("interestsList")
+    protected List<String> interestsList(String src) {
+        if (src == null) {
+            return null;
+        }
+        return Arrays.asList(src.split(",")).stream()
+                .map(String::stripLeading)
+                .collect(Collectors.toList());
     }
 }

@@ -16,9 +16,10 @@ import java.util.stream.Collectors;
 public abstract class UserMapper {
 
     @Mapping(target = "interests", source = "interests", qualifiedByName = "interestsString")
-    public abstract OtusetUser toOtusetUser(CreateUserDto createUserDto);
+    public abstract OtusetUser toOtusetUser(CreateUserDto src);
 
-    public abstract UserDto toUserDto(OtusetUser otusetUser);
+    @Mapping(target = "interests", source = "interests", qualifiedByName = "interestsList")
+    public abstract UserDto toUserDto(OtusetUser src);
 
     @Named("interestsString")
     protected String interestsString(List<String> src) {
@@ -33,7 +34,7 @@ public abstract class UserMapper {
         if (src == null) {
             return null;
         }
-        return Arrays.asList(src.split(",")).stream()
+        return Arrays.stream(src.split(","))
                 .map(String::stripLeading)
                 .collect(Collectors.toList());
     }

@@ -11,8 +11,8 @@ public class UserDto {
     private Long id;
     private String firstName;
     private String lastName;
-    private Integer age;
     private String sex;
+    private Integer age;
     private List<String> interests;
     private String city;
 }

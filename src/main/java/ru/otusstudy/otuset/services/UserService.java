@@ -2,6 +2,9 @@ package ru.otusstudy.otuset.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.otusstudy.otuset.dao.OtusetUserDao;
 import ru.otusstudy.otuset.domain.OtusetUser;
@@ -17,10 +20,23 @@ import java.util.stream.Collectors;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class UserService {
+public class UserService implements UserDetailsService {
 
     private final OtusetUserDao userDao;
     private final UserMapper userMapper;
+
+    private Optional<OtusetUser> getUserById(Long id) {
+        return Optional.empty();
+    }
+
+    private Optional<OtusetUser> getUserByLogin(String login) {
+        return Optional.empty();
+    }
+
+    @Override
+    public OtusetUser loadUserByUsername(String username) throws UsernameNotFoundException {
+        return null;
+    }
 
     public Optional<List<UserDto>> getAll() {
         try {

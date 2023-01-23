@@ -1,5 +1,7 @@
 otuset_user:
   - id: 1
+    login: 'login1'
+    password: 'password'
     firstName: 'firstName'
     lastName: 'lastName'
     sex: 'M'

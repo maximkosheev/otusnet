@@ -1,5 +1,7 @@
 otuset_user:
   - id: 1
+    login: 'login1'
+    password: 'password'
     firstName: 'firstName'
     lastName: 'lastName'
     sex: 'M'
@@ -7,6 +9,8 @@ otuset_user:
     city: 'London'
     interests: 'Reading'
   - id: 2
+    login: 'newLogin'
+    password: 'newPassword'
     firstName: 'newFirstName'
     lastName: 'newLastName'
     sex: 'F'

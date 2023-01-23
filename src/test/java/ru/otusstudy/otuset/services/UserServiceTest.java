@@ -5,7 +5,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import ru.otusstudy.otuset.PasswordEncoderConfig;
+import ru.otusstudy.otuset.config.SecurityConfig;
 import ru.otusstudy.otuset.dao.OtusetUserDao;
 import ru.otusstudy.otuset.domain.OtusetUser;
 import ru.otusstudy.otuset.mappers.UserMapperImpl;
@@ -23,9 +30,14 @@ import static org.mockito.Mockito.*;
         UserService.class,
         UserMapperImpl.class
 })
+@Import(PasswordEncoderConfig.class)
 class UserServiceTest {
+
     @MockBean
     private OtusetUserDao userDao;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;
@@ -84,6 +96,8 @@ class UserServiceTest {
     @Test
     void createUser_shouldCallCreateUser() throws Exception {
         CreateUserDto createUserDto = CreateUserDto.builder()
+                .login("login")
+                .password("password")
                 .firstName("firstName")
                 .lastName("lastName")
                 .sex("M")
@@ -96,6 +110,9 @@ class UserServiceTest {
         ArgumentCaptor<OtusetUser> userArgCapture = ArgumentCaptor.forClass(OtusetUser.class);
         Assertions.assertThat(userService.createUser(createUserDto)).contains(1L);
         verify(userDao).createUser(userArgCapture.capture());
+        Assertions.assertThat(userArgCapture.getValue().getLogin()).isEqualTo(createUserDto.getLogin());
+        Assertions.assertThat(passwordEncoder.matches(createUserDto.getPassword(),
+                userArgCapture.getValue().getPassword())).isTrue();
         Assertions.assertThat(userArgCapture.getValue().getFirstName()).isEqualTo(createUserDto.getFirstName());
         Assertions.assertThat(userArgCapture.getValue().getLastName()).isEqualTo(createUserDto.getLastName());
         Assertions.assertThat(userArgCapture.getValue().getSex()).isEqualTo(createUserDto.getSex());
@@ -107,6 +124,8 @@ class UserServiceTest {
     @Test
     void createUser_shouldReturnEmpty() throws Exception {
         CreateUserDto createUserDto = CreateUserDto.builder()
+                .login("login")
+                .password("password")
                 .firstName("firstName")
                 .lastName("lastName")
                 .sex("M")

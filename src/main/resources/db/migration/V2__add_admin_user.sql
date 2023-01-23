@@ -1,0 +1,2 @@
+INSERT INTO OTUSET_USER(id, login, password, firstName, lastName, sex, age, interests, city)
+    VALUES(1, 'admin', '$2a$08$qiVo7l97JL5wPW3750nW0OZVb94guJdvD2.yH/r2D3QL/tXdWEYe6', 'firstName', 'lastName', 'M', 20, 'IT', 'Moscow')

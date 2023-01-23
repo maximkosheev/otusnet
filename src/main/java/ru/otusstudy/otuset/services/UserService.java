@@ -2,7 +2,6 @@ package ru.otusstudy.otuset.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -17,6 +16,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import static java.lang.String.format;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -30,12 +31,18 @@ public class UserService implements UserDetailsService {
     }
 
     private Optional<OtusetUser> getUserByLogin(String login) {
-        return Optional.empty();
+        try {
+            return userDao.findByLogin(login);
+        } catch (SQLException ex) {
+            log.error("Error occurred while getting user {}", login, ex);
+            return Optional.empty();
+        }
     }
 
     @Override
     public OtusetUser loadUserByUsername(String username) throws UsernameNotFoundException {
-        return null;
+        return getUserByLogin(username)
+                .orElseThrow(() -> new UsernameNotFoundException(format("User %s not found", username)));
     }
 
     public Optional<List<UserDto>> getAll() {

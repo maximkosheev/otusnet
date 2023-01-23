@@ -44,6 +44,8 @@ class OtusetUserDaoTest {
     @ExpectedDataSet(value = "expectedCreateUser.yml", ignoreCols = {"id"})
     void createUser_shouldCreateNewUser() throws Exception {
         OtusetUser newUser = OtusetUser.builder()
+                .login("newLogin")
+                .password("newPassword")
                 .firstName("newFirstName")
                 .lastName("newLastName")
                 .sex("F")

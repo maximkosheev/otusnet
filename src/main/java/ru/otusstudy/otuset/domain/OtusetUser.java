@@ -11,6 +11,8 @@ import java.util.Collection;
 @Builder
 public class OtusetUser implements UserDetails {
     private Long id;
+    private String login;
+    private String password;
     private String firstName;
     private String lastName;
     private String sex;
@@ -25,12 +27,12 @@ public class OtusetUser implements UserDetails {
 
     @Override
     public String getPassword() {
-        return null;
+        return password;
     }
 
     @Override
     public String getUsername() {
-        return null;
+        return login;
     }
 
     @Override

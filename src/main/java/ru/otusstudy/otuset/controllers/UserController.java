@@ -3,7 +3,6 @@ package ru.otusstudy.otuset.controllers;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-import ru.otusstudy.otuset.domain.OtusetUser;
 import ru.otusstudy.otuset.models.dto.requests.CreateUserDto;
 import ru.otusstudy.otuset.models.dto.responses.UserDto;
 import ru.otusstudy.otuset.services.UserService;

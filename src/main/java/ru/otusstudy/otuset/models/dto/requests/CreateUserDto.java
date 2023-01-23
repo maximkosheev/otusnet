@@ -11,6 +11,10 @@ import java.util.List;
 @Builder
 public class CreateUserDto {
     @NotBlank
+    private String login;
+    @NotBlank
+    private String password;
+    @NotBlank
     private String firstName;
     @NotBlank
     private String lastName;

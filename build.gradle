@@ -20,6 +20,7 @@ repositories {
 }
 
 flyway {
+	locations = ["filesystem:${projectDir.path}/db/migrations"]
 	url = 'jdbc:mysql://localhost:3306'
 	user = 'root'
 	password = 'root'

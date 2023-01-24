@@ -12,3 +12,7 @@ docker run --env=MYSQL_ROOT_PASSWORD=root \
    --restart=no \
    --runtime=runc \
    -d mysql:latest
+
+Сборка docker-compose:
+docker-compose build --build-arg JAR_VERSION="0.0.1-SNAPSHOT"
+docker-compose up -d

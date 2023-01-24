@@ -1,13 +1,35 @@
 ---
-version: '3.3'
+version: '3.8'
 
 services:
   db:
-    image: mysql:5.7
+    container_name: 'mysql'
+    image: 'mysql:8.0'
     command: --default-authentication-plugin=mysql_native_password
     restart: always
+    ports:
+      - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: otuset
-
   app:
+    container_name: 'app'
+    depends_on:
+      - db
+    build: .
+    restart: always
+    ports:
+      - '8080:8080'
+    environment:
+      DATASOURCE_HOST: db
+      DATASOURCE_USERNAME: root
+      DATASOURCE_PASSWORD: root
+  flyway:
+    container_name: 'flyway'
+    image: flyway/flyway
+    command: -url=jdbc:mysql://db:3306 -schemas=otuset -user=root -password=root -connectRetries=60 migrate
+    volumes:
+      - ./db/migrations:/flyway/sql
+    depends_on:
+      - db
+

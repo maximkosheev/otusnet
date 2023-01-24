@@ -40,54 +40,67 @@ public class OtusetUserDao {
     }
 
     public List<OtusetUser> getAllUsers() throws SQLException {
-        Statement stmt = dbConnection.createStatement();
-        ResultSet rs = stmt.executeQuery(FIND_ALL);
-        List<OtusetUser> result = new ArrayList<>();
-        while (rs.next()) {
-            OtusetUser user = buildFromResultSet(rs);
-            result.add(user);
+        try (Statement stmt = dbConnection.createStatement()) {
+            ResultSet rs = stmt.executeQuery(FIND_ALL);
+            List<OtusetUser> result = new ArrayList<>();
+            while (rs.next()) {
+                OtusetUser user = buildFromResultSet(rs);
+                result.add(user);
+            }
+            return result;
+        } catch (SQLException ex) {
+            log.error("", ex);
+            throw ex;
         }
-        stmt.close();
-        return result;
     }
 
     public long createUser(OtusetUser newUser) throws SQLException {
-        PreparedStatement stmt = dbConnection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS);
-        stmt.setString(1, newUser.getLogin());
-        stmt.setString(2, newUser.getPassword());
-        stmt.setString(3, newUser.getFirstName());
-        stmt.setString(4, newUser.getLastName());
-        stmt.setString(5, newUser.getSex());
-        stmt.setInt(6, newUser.getAge());
-        stmt.setString(7, newUser.getInterests());
-        stmt.setString(8, newUser.getCity());
-        stmt.execute();
-        ResultSet rs = stmt.getGeneratedKeys();
-        rs.first();
-        long newId = rs.getLong(1);
-        stmt.close();
-        return newId;
+        try (PreparedStatement stmt = dbConnection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
+            stmt.setString(1, newUser.getLogin());
+            stmt.setString(2, newUser.getPassword());
+            stmt.setString(3, newUser.getFirstName());
+            stmt.setString(4, newUser.getLastName());
+            stmt.setString(5, newUser.getSex());
+            stmt.setInt(6, newUser.getAge());
+            stmt.setString(7, newUser.getInterests());
+            stmt.setString(8, newUser.getCity());
+            stmt.execute();
+            ResultSet rs = stmt.getGeneratedKeys();
+            rs.first();
+            return rs.getLong(1);
+        } catch (SQLException ex) {
+            log.error("", ex);
+            throw ex;
+        }
     }
 
     public Optional<OtusetUser> findById(Long id) throws SQLException {
-        PreparedStatement stmt = dbConnection.prepareStatement(FIND_BY_ID);
-        stmt.setString(1, id.toString());
-        ResultSet rs = stmt.executeQuery();
-        if (rs.next()) {
-            return Optional.of(buildFromResultSet(rs));
-        } else {
-            return Optional.empty();
+        try (PreparedStatement stmt = dbConnection.prepareStatement(FIND_BY_ID)) {
+            stmt.setString(1, id.toString());
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return Optional.of(buildFromResultSet(rs));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException ex) {
+            log.error("", ex);
+            throw ex;
         }
     }
 
     public Optional<OtusetUser> findByLogin(String login) throws SQLException {
-        PreparedStatement stmt = dbConnection.prepareStatement(FIND_BY_LOGIN);
-        stmt.setString(1, login);
-        ResultSet rs = stmt.executeQuery();
-        if (rs.next()) {
-            return Optional.of(buildFromResultSet(rs));
-        } else {
-            return Optional.empty();
+        try (PreparedStatement stmt = dbConnection.prepareStatement(FIND_BY_LOGIN)) {
+            stmt.setString(1, login);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return Optional.of(buildFromResultSet(rs));
+            } else {
+                return Optional.empty();
+            }
+        } catch (SQLException ex) {
+            log.error("", ex);
+            throw ex;
         }
     }
 }

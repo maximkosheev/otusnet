@@ -15,6 +15,7 @@ import ru.otusstudy.otuset.PasswordEncoderConfig;
 import ru.otusstudy.otuset.config.SecurityConfig;
 import ru.otusstudy.otuset.dao.OtusetUserDao;
 import ru.otusstudy.otuset.domain.OtusetUser;
+import ru.otusstudy.otuset.exeptions.ServiceException;
 import ru.otusstudy.otuset.mappers.UserMapperImpl;
 import ru.otusstudy.otuset.models.dto.requests.CreateUserDto;
 import ru.otusstudy.otuset.models.dto.responses.UserDto;
@@ -65,7 +66,7 @@ class UserServiceTest {
                                 .city("NY")
                                 .build()
                 ));
-        List<UserDto> users = userService.getAll().get();
+        List<UserDto> users = userService.getAll();
         Assertions.assertThat(users).containsExactlyInAnyOrder(
                 UserDto.builder()
                         .id(1L)
@@ -90,7 +91,8 @@ class UserServiceTest {
     @Test
     void getAll_shouldReturnEmpty() throws Exception {
         doThrow(SQLException.class).when(userDao).getAllUsers();
-        Assertions.assertThat(userService.getAll()).isEmpty();
+        Assertions.assertThatThrownBy(() -> userService.getAll())
+                .isInstanceOf(ServiceException.class);
     }
 
     @Test
@@ -108,7 +110,7 @@ class UserServiceTest {
 
         when(userDao.createUser(any())).thenReturn(1L);
         ArgumentCaptor<OtusetUser> userArgCapture = ArgumentCaptor.forClass(OtusetUser.class);
-        Assertions.assertThat(userService.createUser(createUserDto)).contains(1L);
+        Assertions.assertThat(userService.createUser(createUserDto)).isEqualTo(1L);
         verify(userDao).createUser(userArgCapture.capture());
         Assertions.assertThat(userArgCapture.getValue().getLogin()).isEqualTo(createUserDto.getLogin());
         Assertions.assertThat(passwordEncoder.matches(createUserDto.getPassword(),
@@ -122,7 +124,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createUser_shouldReturnEmpty() throws Exception {
+    void createUser_shouldThrowError() throws Exception {
         CreateUserDto createUserDto = CreateUserDto.builder()
                 .login("login")
                 .password("password")
@@ -135,7 +137,8 @@ class UserServiceTest {
                 .build();
 
         doThrow(SQLException.class).when(userDao).createUser(any());
-        Assertions.assertThat(userService.createUser(createUserDto)).isEmpty();
+        Assertions.assertThatThrownBy(() -> userService.createUser(createUserDto))
+                .isInstanceOf(ServiceException.class);
     }
 
 }

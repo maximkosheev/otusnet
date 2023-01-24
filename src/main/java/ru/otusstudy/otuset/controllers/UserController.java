@@ -21,15 +21,18 @@ public class UserController {
     @GetMapping
     public List<UserDto> getUsers() {
         log.info("Получение списка пользователей");
-        return userService.getAll()
-                .orElseThrow(() -> new RuntimeException("Ошибка получения списка пользователей"));
+        return userService.getAll();
+    }
+
+    @GetMapping("/{id}")
+    public UserDto getUser(@PathVariable Long id) {
+        log.info("Получение пользователя {}", id);
+        return userService.getById(id);
     }
 
     @PostMapping("/create")
     public String createUser(@Valid @RequestBody CreateUserDto createUserDto) {
         log.info("Создание пользователя: {}", createUserDto);
-        return userService.createUser(createUserDto)
-                .map(id -> "id" + id)
-                .orElseThrow(() -> new RuntimeException("Пользователь не создан"));
+        return "id" + userService.createUser(createUserDto);
     }
 }

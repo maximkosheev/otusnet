@@ -2,13 +2,19 @@ package ru.otusstudy.otuset.controllers;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.server.ResponseStatusException;
+import ru.otusstudy.otuset.exeptions.EntityNotFoundException;
 import ru.otusstudy.otuset.models.dto.requests.CreateUserDto;
 import ru.otusstudy.otuset.models.dto.responses.UserDto;
 import ru.otusstudy.otuset.services.UserService;
 
 import javax.validation.Valid;
 import java.util.List;
+
+import static java.lang.String.format;
 
 @Slf4j
 @RestController
@@ -27,7 +33,11 @@ public class UserController {
     @GetMapping("/{id}")
     public UserDto getUser(@PathVariable Long id) {
         log.info("Получение пользователя {}", id);
-        return userService.getById(id);
+        try {
+            return userService.getById(id);
+        } catch (EntityNotFoundException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, format("User %d not found", id));
+        }
     }
 
     @PostMapping("/create")

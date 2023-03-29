@@ -16,10 +16,18 @@ public class DatabaseConfig {
     private final DatabaseProperties dbProperties;
 
     @Bean
-    public Connection dbConnection() throws SQLException {
+    public Connection masterConnection() throws SQLException {
         return DriverManager.getConnection(
-                dbProperties.getUrl(),
-                dbProperties.getUsername(),
-                dbProperties.getPassword());
+                dbProperties.getMaster().getUrl(),
+                dbProperties.getMaster().getUsername(),
+                dbProperties.getMaster().getPassword());
+    }
+
+    @Bean
+    public Connection slaveConnection() throws SQLException {
+        return DriverManager.getConnection(
+                dbProperties.getSlave().getUrl(),
+                dbProperties.getSlave().getUsername(),
+                dbProperties.getSlave().getPassword());
     }
 }

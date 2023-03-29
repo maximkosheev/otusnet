@@ -1,10 +1,16 @@
 server:
   port: 8080
 datasource:
-  driver-class-name: com.mysql.jdbc.Driver
-  username: ${DATASOURCE_USERNAME}
-  password: ${DATASOURCE_PASSWORD}
-  url: jdbc:mysql://${DATASOURCE_HOST}:3306/otuset
+  master:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    url: jdbc:mysql://${DATASOURCE_HOST}:3308/otuset
+  slave:
+    driver-class-name: com.mysql.jdbc.Driver
+    username: ${DATASOURCE_USERNAME}
+    password: ${DATASOURCE_PASSWORD}
+    url: jdbc:mysql://${DATASOURCE_HOST}:3309/otuset
 logging:
   level:
     root: info

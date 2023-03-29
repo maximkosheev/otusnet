@@ -66,4 +66,13 @@ public class UserService implements UserDetailsService {
         }
     }
 
+    public List<UserDto> searchByName(String firstName, String lastName) {
+        try {
+            return userDao.findByFIO(firstName, lastName).stream()
+                    .map(userMapper::toUserDto)
+                    .collect(Collectors.toList());
+        } catch (SQLException ex) {
+            throw new ServiceException("Ошибка при поиске пользователей");
+        }
+    }
 }

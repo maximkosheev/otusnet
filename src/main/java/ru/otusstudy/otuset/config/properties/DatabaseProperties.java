@@ -8,7 +8,14 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "datasource")
 public class DatabaseProperties {
-    private String url;
-    private String username;
-    private String password;
+
+    private ConnectionProperties master;
+    private ConnectionProperties slave;
+
+    @Data
+    public static class ConnectionProperties {
+        private String url;
+        private String username;
+        private String password;
+    }
 }

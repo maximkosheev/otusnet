@@ -7,6 +7,7 @@ import ru.otusstudy.otuset.domain.OtusetUser;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,8 +23,11 @@ public class OtusetUserDao {
             "WHERE id = ?";
     private static final String FIND_BY_LOGIN = "SELECT id, login, password, firstName, lastName, sex, age, interests, city FROM OTUSET_USER " +
             "WHERE login = ?";
+    private static final String FIND_BY_FIO = "SELECT id, login, firstName, lastName, sex, age, interests, city FROM OTUSET_USER " +
+            "WHERE lastName like ? AND firstName like ?";
 
-    private final Connection dbConnection;
+    private final Connection masterConnection;
+    private final Connection slaveConnection;
 
     private OtusetUser buildFromResultSet(ResultSet rs) throws SQLException {
         return OtusetUser.builder()
@@ -40,7 +44,7 @@ public class OtusetUserDao {
     }
 
     public List<OtusetUser> getAllUsers() throws SQLException {
-        try (Statement stmt = dbConnection.createStatement()) {
+        try (Statement stmt = slaveConnection.createStatement()) {
             ResultSet rs = stmt.executeQuery(FIND_ALL);
             List<OtusetUser> result = new ArrayList<>();
             while (rs.next()) {
@@ -55,7 +59,7 @@ public class OtusetUserDao {
     }
 
     public long createUser(OtusetUser newUser) throws SQLException {
-        try (PreparedStatement stmt = dbConnection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
+        try (PreparedStatement stmt = masterConnection.prepareStatement(CREATE, Statement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, newUser.getLogin());
             stmt.setString(2, newUser.getPassword());
             stmt.setString(3, newUser.getFirstName());
@@ -75,7 +79,7 @@ public class OtusetUserDao {
     }
 
     public Optional<OtusetUser> findById(Long id) throws SQLException {
-        try (PreparedStatement stmt = dbConnection.prepareStatement(FIND_BY_ID)) {
+        try (PreparedStatement stmt = slaveConnection.prepareStatement(FIND_BY_ID)) {
             stmt.setString(1, id.toString());
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -90,7 +94,7 @@ public class OtusetUserDao {
     }
 
     public Optional<OtusetUser> findByLogin(String login) throws SQLException {
-        try (PreparedStatement stmt = dbConnection.prepareStatement(FIND_BY_LOGIN)) {
+        try (PreparedStatement stmt = slaveConnection.prepareStatement(FIND_BY_LOGIN)) {
             stmt.setString(1, login);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
@@ -98,6 +102,31 @@ public class OtusetUserDao {
             } else {
                 return Optional.empty();
             }
+        } catch (SQLException ex) {
+            log.error("", ex);
+            throw ex;
+        }
+    }
+
+    public List<OtusetUser> findByFIO(String firstName, String lastName) throws SQLException {
+        try (PreparedStatement stmt = slaveConnection.prepareStatement(FIND_BY_FIO)) {
+            stmt.setString(1, firstName);
+            stmt.setString(2, lastName);
+            ResultSet rs = stmt.executeQuery();
+            List<OtusetUser> result = new LinkedList<>();
+            while (rs.next()) {
+                result.add(OtusetUser.builder()
+                        .id(rs.getLong(1))
+                        .login(rs.getString(2))
+                        .firstName(rs.getString(3))
+                        .lastName(rs.getString(4))
+                        .sex(rs.getString(5))
+                        .age(rs.getInt(6))
+                        .interests(rs.getString(7))
+                        .city(rs.getString(8))
+                        .build());
+            }
+            return result;
         } catch (SQLException ex) {
             log.error("", ex);
             throw ex;

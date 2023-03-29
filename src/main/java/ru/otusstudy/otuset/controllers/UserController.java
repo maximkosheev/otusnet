@@ -45,4 +45,12 @@ public class UserController {
         log.info("Создание пользователя: {}", createUserDto);
         return "id" + userService.createUser(createUserDto);
     }
+
+    @GetMapping("/search")
+    public List<UserDto> searchUsers(
+            @RequestParam(value = "first_name") String firstName,
+            @RequestParam(value = "last_name") String lastName) {
+        log.info("Поиск пользователей по firstName: {}, lastName: {}", firstName, lastName);
+        return userService.searchByName(firstName, lastName);
+    }
 }

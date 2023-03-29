@@ -21,7 +21,7 @@ repositories {
 
 flyway {
 	locations = ["filesystem:${projectDir.path}/db/migrations"]
-	url = 'jdbc:mysql://localhost:3306'
+	url = 'jdbc:mysql://localhost:3308'
 	user = 'root'
 	password = 'root'
 	schemas = ['otuset']

@@ -2,6 +2,7 @@ package ru.otusstudy.otuset.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import ru.otusstudy.otuset.dao.FriendshipDao;
 import ru.otusstudy.otuset.domain.Friendship;
@@ -14,9 +15,13 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class FriendshipService {
+    private final static String FRIENDSHIP_KEY = "friendship:{id}";
+
     private final FriendshipDao dao;
 
-    public List<Friendship> getAll() {
+    private final SetOperations<String, Long> userFriends;
+
+    public List<Friendship> findAll() {
         try {
             return dao.findAll();
         } catch (SQLException ex) {
@@ -38,5 +43,17 @@ public class FriendshipService {
         } catch (SQLException ex) {
             throw new ServiceException("Ошибка при создании связи пользователей");
         }
+    }
+
+    public void updateFriendshipsCache() {
+        findAll().forEach(friendship -> {
+            String key = FRIENDSHIP_KEY.replace("{id}", String.valueOf(friendship.getUserId()));
+            Long[] ids = new Long[friendship.getFriends().size()];
+            userFriends.add(key, friendship.getFriends().toArray(ids));
+        });
+    }
+
+    public Friendship getFriendshipByUserId(Long userId) {
+        return null;
     }
 }

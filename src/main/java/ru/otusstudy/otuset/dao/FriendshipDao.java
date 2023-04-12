@@ -32,7 +32,7 @@ public class FriendshipDao {
         return Friendship.builder()
                 .id(rs.getLong("id"))
                 .userId(rs.getLong("user_id"))
-                .friends(friendIds.stream().map(Long::getLong).collect(Collectors.toList()))
+                .friends(friendIds.stream().map(Long::getLong).collect(Collectors.toSet()))
                 .build();
     }
 

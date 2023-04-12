@@ -9,17 +9,22 @@ import ru.otusstudy.otuset.domain.Friendship;
 import ru.otusstudy.otuset.exeptions.ServiceException;
 
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class FriendshipService {
-    private final static String FRIENDSHIP_KEY = "friendship:{id}";
+    private static final String FRIENDSHIP_KEY = "friendship:{id}";
 
     private final FriendshipDao dao;
 
     private final SetOperations<String, Long> userFriends;
+
+    private String friendshipKey(Long id) {
+        return FRIENDSHIP_KEY.replace("{id}", String.valueOf(id));
+    }
 
     public List<Friendship> findAll() {
         try {
@@ -47,13 +52,15 @@ public class FriendshipService {
 
     public void updateFriendshipsCache() {
         findAll().forEach(friendship -> {
-            String key = FRIENDSHIP_KEY.replace("{id}", String.valueOf(friendship.getUserId()));
             Long[] ids = new Long[friendship.getFriends().size()];
-            userFriends.add(key, friendship.getFriends().toArray(ids));
+            userFriends.add(friendshipKey(friendship.getId()), friendship.getFriends().toArray(ids));
         });
     }
 
     public Friendship getFriendshipByUserId(Long userId) {
-        return null;
+        return Friendship.builder()
+                .userId(userId)
+                .friends(userFriends.intersect(Collections.singleton(friendshipKey(userId))))
+                .build();
     }
 }

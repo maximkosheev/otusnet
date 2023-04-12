@@ -3,12 +3,12 @@ package ru.otusstudy.otuset.domain;
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
+import java.util.Set;
 
 @Data
 @Builder
 public class Friendship {
     private Long id;
     private Long userId;
-    private List<Long> friends;
+    private Set<Long> friends;
 }

@@ -2,12 +2,14 @@ package ru.otusstudy.otuset.services;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import ru.otusstudy.otuset.dao.FriendshipDao;
 import ru.otusstudy.otuset.domain.Friendship;
 import ru.otusstudy.otuset.exeptions.ServiceException;
 
+import javax.annotation.PostConstruct;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
@@ -20,7 +22,14 @@ public class FriendshipService {
 
     private final FriendshipDao dao;
 
-    private final SetOperations<String, Long> userFriends;
+    private final RedisTemplate<String, Long> redisTemplate;
+
+    private SetOperations<String, Long> userFriends;
+
+    @PostConstruct
+    private void init() {
+        userFriends = redisTemplate.opsForSet();
+    }
 
     private String friendshipKey(Long id) {
         return FRIENDSHIP_KEY.replace("{id}", String.valueOf(id));

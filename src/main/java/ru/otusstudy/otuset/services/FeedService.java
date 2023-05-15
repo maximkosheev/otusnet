@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import ru.otusstudy.otuset.models.dto.responses.PostDto;
 
 import javax.annotation.PostConstruct;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -37,9 +34,9 @@ public class FeedService {
      * Добавляет идентификатор новости {@code postId} в ленту пользователей {@code userIds}
      */
     public void addPostToFeeds(Collection<Long> userIds, Long postId) {
-        userIds.forEach(userId -> {
-            feedOperation.leftPush(feedKey(userId), postId);
-        });
+        userIds.stream()
+                .filter(Objects::nonNull)
+                .forEach(userId -> feedOperation.leftPush(feedKey(userId), postId));
     }
 
     public List<PostDto> getFeed(Long userId) {

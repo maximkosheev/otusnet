@@ -16,7 +16,7 @@ public class FriendsTask {
 
     private final FriendshipService friendshipService;
 
-    @Scheduled(fixedDelay = 5 * 60 * 1000, initialDelay = 60 * 1000)
+    @Scheduled(fixedDelay = 1 * 60 * 1000, initialDelay = 60 * 1000)
     public void updateFriendships() {
         log.info("Обновление списка друзей пользователей");
         friendshipService.updateFriendshipsCache();

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FriendshipDao {
 
-    private static final String FIND_ALL = "SELECT id, user_id, GROUP_CONCAT(friend_id) as friends from friendship GROUP BY user_id";
+    private static final String FIND_ALL = "SELECT user_id, GROUP_CONCAT(friend_id) as friends from friendship GROUP BY user_id";
     private static final String FIND_BY_ID = "SELECT friend_id from friendship WHERE user_id = ?";
     private static final String CREATE = "INSERT INTO friendship(user_id, friend_id) VALUES(? ?)";
 
@@ -30,9 +30,8 @@ public class FriendshipDao {
                 .orElse(Collections.emptyList());
 
         return Friendship.builder()
-                .id(rs.getLong("id"))
                 .userId(rs.getLong("user_id"))
-                .friends(friendIds.stream().map(Long::getLong).collect(Collectors.toSet()))
+                .friends(friendIds.stream().map(Long::parseLong).collect(Collectors.toSet()))
                 .build();
     }
 

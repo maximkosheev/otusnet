@@ -23,7 +23,7 @@ public class SecurityConfig {
         http.csrf().disable();
         http.authorizeHttpRequests(authorize -> authorize
                 .mvcMatchers("/login").permitAll()
-                .mvcMatchers("/users/**", "/feed").authenticated()
+                .mvcMatchers("/users/**", "/post/**", "/feed").authenticated()
                 .anyRequest().denyAll()
         );
         return http.build();

@@ -24,7 +24,7 @@ public class PostService {
             postCache.put(postId, content);
             feedService.addPostToFeeds(friendshipService.getFriendshipByUserId(author.getId()).getFriends(), postId);
         } catch (Exception ex) {
-            log.error("Ошибкак при записи поста в кэш");
+            log.error("Ошибкак при записи поста в кэш", ex);
         }
     }
 

@@ -62,7 +62,7 @@ public class FriendshipService {
     public void updateFriendshipsCache() {
         findAll().forEach(friendship -> {
             Long[] ids = new Long[friendship.getFriends().size()];
-            userFriends.add(friendshipKey(friendship.getId()), friendship.getFriends().toArray(ids));
+            userFriends.add(friendshipKey(friendship.getUserId()), friendship.getFriends().toArray(ids));
         });
     }
 

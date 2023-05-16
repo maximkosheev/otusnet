@@ -10,6 +10,6 @@ public class PasswordEncoderUtil {
 
     @Test
     void encodePassword() {
-        System.out.println(passwordEncoder.encode("admin"));
+        System.out.println(passwordEncoder.encode("user3"));
     }
 }
